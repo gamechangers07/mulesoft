@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+ 
+  <http:listener-config name="HTTP_Listener_Configuration" host="localhost" port="9988" doc:name="HTTP Listener Configuration"/>
+
+    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="9988" doc:name="HTTP Request Configuration"/>
+    <http:listener-config name="HTTP_Listener_Configuration1" host="0.0.0.0" port="9975" doc:name="HTTP Listener Configuration"/>
+ 
+    <flow name="apstartFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration1" path="/sfdc" allowedMethods="GET" doc:name="HTTP"/>
+        <flow-ref name="subflow1" doc:name="subflow1"/>
+        <flow-ref name="subflow2" doc:name="subflow2"/>
+        <flow-ref name="flow2" doc:name="flow2"/>
+
+        <logger  level="INFO" doc:name="Logger1" message="#['Name:'+message.outboundProperties.qname +'Type:'+ flowVars.qtype + message.inboundProperties.'http.query.params'.name]"/>
+    </flow>
+     <flow name="apstartHTTPFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration1" path="/apstart" allowedMethods="GET" doc:name="HTTP"/>
+        <set-session-variable variableName="s1" value="#['S1']" doc:name="S1"/>
+        <set-variable variableName="V1" value="#['V1']" doc:name="V1"/>
+        <set-property propertyName="qname" value="#['testing']" doc:name="Copy_of_Property"/>
+
+        <http:request config-ref="HTTP_Request_Configuration" path="/httpFlow" method="GET" doc:name="Localhost_HTTP"/>
+        <logger message="#[sessionVars]" level="INFO" doc:name="Logger"/>
+
+    </flow>
+    <flow name="HTTPFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/httpFlow" allowedMethods="GET" doc:name="HTTP"/>
+        <set-variable variableName="V2" value="#['V2']" doc:name="V2"/>
+        <set-session-variable variableName="S2" value="#['S2']" doc:name="S2"/>
+
+    </flow>
+     <flow name="flow2">
+        <set-payload value="flow2" doc:name="Set Payload"/>
+    </flow>
+    <sub-flow name="subflow1">
+        <set-payload value="#['Hello World'.toUpperCase()]" doc:name="Set Payload"/>
+        <set-property propertyName="qname" value="#[message.inboundProperties.'http.query.params'.name]" doc:name="Property"/>
+        <set-session-variable variableName="s1" value="#['S1']" doc:name="Copy_of_S1"/>
+    </sub-flow>
+    <sub-flow name="subflow2">
+        <set-variable variableName="qtype" value="#[message.inboundProperties.'http.query.params'.type]" doc:name="Variable"/>
+        <set-session-variable variableName="color" value="grey" doc:name="Session Variable"/>
+    </sub-flow>
+</mule>

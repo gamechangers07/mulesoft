@@ -1,0 +1,112 @@
+INFO  2016-05-03 16:03:55,313 [Mule.app.deployer.monitor.1.thread.1] org.mule.module.launcher.application.DefaultMuleApplication: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Stopping app 'proxying-a-soap-api'                       +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2016-05-03 16:03:55,319 [Mule.app.deployer.monitor.1.thread.1] org.mule.construct.FlowConstructLifecycleManager: Stopping flow: main
+INFO  2016-05-03 16:03:55,323 [Mule.app.deployer.monitor.1.thread.1] org.mule.processor.SedaStageLifecycleManager: Stopping service: main.stage1
+INFO  2016-05-03 16:03:55,498 [Mule.app.deployer.monitor.1.thread.1] org.mule.lifecycle.AbstractLifecycleManager: Stopping model: _muleSystemModel
+INFO  2016-05-03 16:03:55,506 [Mule.app.deployer.monitor.1.thread.1] org.mule.lifecycle.AbstractLifecycleManager: Stopping connector: connector.http.mule.default
+INFO  2016-05-03 16:03:55,548 [Mule.app.deployer.monitor.1.thread.1] org.mule.module.http.internal.listener.DefaultHttpListenerConfig: Stopped listener on http://0.0.0.0:9901
+INFO  2016-05-03 16:03:55,550 [Mule.app.deployer.monitor.1.thread.1] org.mule.util.queue.QueueXaResourceManager: Stopping ResourceManager
+INFO  2016-05-03 16:03:55,550 [Mule.app.deployer.monitor.1.thread.1] org.mule.util.queue.QueueXaResourceManager: Stopped ResourceManager
+INFO  2016-05-03 16:03:55,572 [Mule.app.deployer.monitor.1.thread.1] org.mule.module.launcher.application.DefaultMuleApplication: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Disposing app 'proxying-a-soap-api'                      +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2016-05-03 16:03:55,573 [Mule.app.deployer.monitor.1.thread.1] org.mule.lifecycle.AbstractLifecycleManager: Disposing RegistryBroker
+INFO  2016-05-03 16:03:55,574 [Mule.app.deployer.monitor.1.thread.1] org.mule.construct.FlowConstructLifecycleManager: Disposing flow: main
+INFO  2016-05-03 16:03:55,575 [Mule.app.deployer.monitor.1.thread.1] org.mule.processor.SedaStageLifecycleManager: Disposing service: main.stage1
+INFO  2016-05-03 16:03:55,577 [Mule.app.deployer.monitor.1.thread.1] org.mule.lifecycle.AbstractLifecycleManager: Disposing model: _muleSystemModel
+INFO  2016-05-03 16:03:55,580 [Mule.app.deployer.monitor.1.thread.1] org.mule.transport.http.HttpConnector: Disconnected: HttpConnector
+{
+  name=connector.http.mule.default
+  lifecycle=stop
+  this=523b670d
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[http]
+  serviceOverrides=<none>
+}
+
+INFO  2016-05-03 16:03:55,581 [Mule.app.deployer.monitor.1.thread.1] org.mule.lifecycle.AbstractLifecycleManager: Disposing connector: connector.http.mule.default
+INFO  2016-05-03 16:03:55,581 [Mule.app.deployer.monitor.1.thread.1] org.mule.util.monitor.ExpiryMonitor: disposing monitor
+INFO  2016-05-03 16:03:55,897 [Mule.app.deployer.monitor.1.thread.1] org.mule.config.spring.MuleArtifactContext: Closing org.mule.config.spring.MuleArtifactContext@602703: startup date [Mon May 02 16:58:59 EDT 2016]; root of context hierarchy
+INFO  2016-05-03 16:03:56,002 [Mule.app.deployer.monitor.1.thread.1] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application "proxying-a-soap-api" shut down normally on: 5/3/16    *
+* 4:03 PM                                                            *
+* Up for: 0 days, 23 hours, 4 mins, 50.850 sec                       *
+**********************************************************************
+INFO  2016-05-03 16:03:56,154 [Mule.app.deployer.monitor.1.thread.1] org.mule.module.launcher.application.DefaultMuleApplication: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing app 'proxying-a-soap-api'                   +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2016-05-03 16:03:56,162 [Mule.app.deployer.monitor.1.thread.1] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2016-05-03 16:03:56,168 [Mule.app.deployer.monitor.1.thread.1] org.mule.module.extension.internal.manager.DefaultExtensionManager: Starting discovery of extensions
+INFO  2016-05-03 16:03:56,187 [Mule.app.deployer.monitor.1.thread.1] org.mule.module.extension.internal.manager.DefaultExtensionManager: Discovered 1 extensions
+INFO  2016-05-03 16:03:56,187 [Mule.app.deployer.monitor.1.thread.1] org.mule.module.extension.internal.manager.DefaultExtensionManager: Registering extension validation (version 3.7)
+INFO  2016-05-03 16:03:56,192 [Mule.app.deployer.monitor.1.thread.1] org.mule.config.spring.MuleArtifactContext: Refreshing org.mule.config.spring.MuleArtifactContext@3566859e: startup date [Tue May 03 16:03:56 EDT 2016]; root of context hierarchy
+INFO  2016-05-03 16:03:56,654 [Mule.app.deployer.monitor.1.thread.1] org.mule.config.spring.processors.NoDevkitInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2016-05-03 16:03:56,970 [Mule.app.deployer.monitor.1.thread.1] org.mule.lifecycle.AbstractLifecycleManager: Initialising model: _muleSystemModel
+INFO  2016-05-03 16:03:56,973 [Mule.app.deployer.monitor.1.thread.1] org.mule.construct.FlowConstructLifecycleManager: Initialising flow: main
+INFO  2016-05-03 16:03:56,974 [Mule.app.deployer.monitor.1.thread.1] org.mule.exception.DefaultMessagingExceptionStrategy: Initialising exception listener: org.mule.exception.DefaultMessagingExceptionStrategy@589b911e
+INFO  2016-05-03 16:03:56,986 [Mule.app.deployer.monitor.1.thread.1] org.mule.processor.SedaStageLifecycleManager: Initialising service: main.stage1
+INFO  2016-05-03 16:03:58,153 [Mule.app.deployer.monitor.1.thread.1] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\pbalwani\AnypointStudio\workspace\.mule\.\.mule\proxying-a-soap-api\queue-tx-log\tx1.log and C:\Users\pbalwani\AnypointStudio\workspace\.mule\.\.mule\proxying-a-soap-api\queue-tx-log\tx2.log
+INFO  2016-05-03 16:03:58,157 [Mule.app.deployer.monitor.1.thread.1] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\pbalwani\AnypointStudio\workspace\.mule\.\.mule\proxying-a-soap-api\queue-xa-tx-log\tx1.log and C:\Users\pbalwani\AnypointStudio\workspace\.mule\.\.mule\proxying-a-soap-api\queue-xa-tx-log\tx2.log
+INFO  2016-05-03 16:03:58,256 [Mule.app.deployer.monitor.1.thread.1] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: connector.http.mule.default
+INFO  2016-05-03 16:03:58,300 [Mule.app.deployer.monitor.1.thread.1] org.mule.config.spring.SpringXmlConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='C:\Users\pbalwani\AnypointStudio\workspace\.mule\apps\proxying-a-soap-api\soap-api-proxy.xml'}]"
+INFO  2016-05-03 16:03:58,300 [Mule.app.deployer.monitor.1.thread.1] org.mule.config.builders.AutoConfigurationBuilder: Configured Mule using "org.mule.config.builders.AutoConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='C:\Users\pbalwani\AnypointStudio\workspace\.mule\apps\proxying-a-soap-api\soap-api-proxy.xml'}]"
+INFO  2016-05-03 16:03:58,301 [Mule.app.deployer.monitor.1.thread.1] org.mule.module.launcher.application.DefaultMuleApplication: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Starting app 'proxying-a-soap-api'                       +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2016-05-03 16:03:58,304 [Mule.app.deployer.monitor.1.thread.1] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2016-05-03 16:03:58,304 [Mule.app.deployer.monitor.1.thread.1] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2016-05-03 16:03:58,322 [Mule.app.deployer.monitor.1.thread.1] org.mule.module.http.internal.listener.DefaultHttpListenerConfig: Listening for requests on http://0.0.0.0:9901
+INFO  2016-05-03 16:03:58,324 [Mule.app.deployer.monitor.1.thread.1] org.mule.transport.http.HttpConnector: Connected: HttpConnector
+{
+  name=connector.http.mule.default
+  lifecycle=initialise
+  this=40ab95b3
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[http]
+  serviceOverrides=<none>
+}
+
+INFO  2016-05-03 16:03:58,324 [Mule.app.deployer.monitor.1.thread.1] org.mule.transport.http.HttpConnector: Starting: HttpConnector
+{
+  name=connector.http.mule.default
+  lifecycle=initialise
+  this=40ab95b3
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[http]
+  serviceOverrides=<none>
+}
+
+INFO  2016-05-03 16:03:58,324 [Mule.app.deployer.monitor.1.thread.1] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: connector.http.mule.default
+INFO  2016-05-03 16:03:58,326 [Mule.app.deployer.monitor.1.thread.1] org.mule.modules.oauth2.provider.agents.DefaultSplashScreenAgent: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ DevKit Extensions (0) used in this application 
+                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2016-05-03 16:03:58,330 [Mule.app.deployer.monitor.1.thread.1] org.mule.lifecycle.AbstractLifecycleManager: Starting model: _muleSystemModel
+INFO  2016-05-03 16:03:58,331 [Mule.app.deployer.monitor.1.thread.1] org.mule.construct.FlowConstructLifecycleManager: Starting flow: main
+INFO  2016-05-03 16:03:58,331 [Mule.app.deployer.monitor.1.thread.1] org.mule.processor.SedaStageLifecycleManager: Starting service: main.stage1
+INFO  2016-05-03 16:03:58,350 [Mule.app.deployer.monitor.1.thread.1] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2016-05-03 16:03:58,355 [Mule.app.deployer.monitor.1.thread.1] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.proxying-a-soap-api:type=Connector,name="connector.http.mule.default.1"
+INFO  2016-05-03 16:03:58,358 [Mule.app.deployer.monitor.1.thread.1] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: proxying-a-soap-api                                   *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   DevKit Extension Information                                     *
+*   JMX Agent                                                        *
+*   Batch module default engine                                      *
+*   Wrapper Manager                                                  *
+**********************************************************************

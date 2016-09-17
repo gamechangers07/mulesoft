@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+    <sub-flow name="test">
+        <logger level="INFO" doc:name="Logger"/>
+        <vm:outbound-endpoint exchange-pattern="request-response" path="variables" doc:name="VM / Variables Demo"/>
+    </sub-flow>
+    <flow name="MuleScopesFlow1" >
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9903" path="inbound" doc:name="HTTP / Inbound Scope Demo"/>
+        <logger level="INFO" doc:name="Logger"/>
+        <vm:outbound-endpoint exchange-pattern="request-response" path="inbound" doc:name="VM / Inbound Scope Demo"/>
+    </flow>
+    <flow name="MuleScopesFlow2" >
+        <vm:inbound-endpoint exchange-pattern="request-response" path="inbound" doc:name="VM / Inbound Scope Demo"/>
+        <logger level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="MuleScopesFlow3" >
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9903" path="outbound" doc:name="HTTP / Outbound Scope Demo"/>
+        <message-properties-transformer doc:name="Set Outbound Property">
+            <add-message-property key="Meal" value="Soylent Green"/>
+        </message-properties-transformer>
+        <logger level="INFO" doc:name="Logger"/>
+        <vm:outbound-endpoint exchange-pattern="request-response" path="outbound" doc:name="VM / Outbound Scope Demo"/>
+    </flow>
+    <flow name="MuleScopesFlow4" >
+        <vm:inbound-endpoint exchange-pattern="request-response" path="outbound" doc:name="VM / Outbound Scope Demo"/>
+        <logger level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="MuleScopesFlow5" >
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9903" path="invocation" doc:name="HTTP / Invocation Scope Demo"/>
+        <message-properties-transformer scope="invocation" doc:name="Set Invocation Variable">
+            <add-message-property key="Organism" value="Plankton"/>
+        </message-properties-transformer>
+        <logger level="INFO" doc:name="Logger"/>
+        <vm:outbound-endpoint exchange-pattern="request-response" path="invocation" doc:name="VM / Invocation Scope Demo"/>
+    </flow>
+    <flow name="MuleScopesFlow6" >
+        <vm:inbound-endpoint exchange-pattern="request-response" path="invocation" doc:name="VM / Invocation Scope Demo"/>
+        <logger level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="MuleScopesFlow7" >
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9903" path="session" doc:name="HTTP / Session Scope Demo"/>
+        <message-properties-transformer scope="session" doc:name="Set Session Variable">
+            <add-message-property key="Profession" value="Therapist"/>
+        </message-properties-transformer>
+        <logger level="INFO" doc:name="Logger"/>
+        <vm:outbound-endpoint exchange-pattern="request-response" path="session" doc:name="VM / Session Scope Demo"/>
+    </flow>
+    <flow name="MuleScopesFlow8" >
+        <vm:inbound-endpoint exchange-pattern="request-response" path="session" doc:name="VM / Session Scope Demo"/>
+        <logger level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="MuleScopesFlow9" >
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9903" path="variables" doc:name="HTTP / Variables Demo"/>
+        <set-variable variableName="Years" value="7500000" doc:name="Set Variable"/>
+        <set-session-variable variableName="Answer" value="42" doc:name="Set Session Variable"/>
+        <flow-ref name="test" doc:name="Flow Reference"/>
+    </flow>
+    <flow name="MuleScopesFlow10" >
+        <vm:inbound-endpoint exchange-pattern="request-response" path="variables" doc:name="VM / Variables Demo"/>
+        <logger level="INFO" doc:name="Logger"/>
+    </flow>
+</mule>

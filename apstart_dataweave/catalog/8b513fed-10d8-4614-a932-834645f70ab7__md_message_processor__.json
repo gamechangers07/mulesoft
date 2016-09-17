@@ -1,0 +1,11 @@
+{
+    "inputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "String_To_Xml_findFlight_",
+            "typeId": "findFlight"
+        }
+    },
+    "outputMessageMetadata": {},
+    "id": "8b513fed-10d8-4614-a932-834645f70ab7",
+    "version": "5.2.0.0"
+}

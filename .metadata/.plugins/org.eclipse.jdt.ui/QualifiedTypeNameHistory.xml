@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="org.codehaus.jackson.annotate.JsonProperty"/>
+<fullyQualifiedTypeName name="javax.xml.bind.annotation.XmlAccessorType"/>
+<fullyQualifiedTypeName name="com.training.webservice.HelloWorld"/>
+<fullyQualifiedTypeName name="com.training.model.Flight"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="javax.jws.WebService"/>
+<fullyQualifiedTypeName name="com.training.MoneyResponse"/>
+<fullyQualifiedTypeName name="com.training.service.IBankService"/>
+<fullyQualifiedTypeName name="com.training.MoneyRequest"/>
+</qualifiedTypeNameHistroy>

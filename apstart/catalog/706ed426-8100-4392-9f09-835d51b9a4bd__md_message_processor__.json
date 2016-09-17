@@ -1,0 +1,18 @@
+{
+    "inputMessageMetadata": {
+        "flowVariables": {
+            "originalFilename": {
+                "connectorName": "#_custom_mule_metadata_type_#",
+                "typeId": "Account_CSV"
+            }
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "Account_MAP"
+        }
+    },
+    "id": "706ed426-8100-4392-9f09-835d51b9a4bd",
+    "version": "5.2.0.0"
+}

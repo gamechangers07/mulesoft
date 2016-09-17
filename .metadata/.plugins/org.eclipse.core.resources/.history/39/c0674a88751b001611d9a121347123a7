@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:jersey="http://www.mulesoft.org/schema/mule/jersey" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/jersey http://www.mulesoft.org/schema/mule/jersey/current/mule-jersey.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd">
+    <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8123" doc:name="HTTP Listener Configuration"/>
+    <ws:consumer-config name="Web_Service_Consumer" wsdlLocation="http://ussltcsnw2644.solutions.glbsnet.com:9080/SOLQiModuleWeb/sca/SOLQiServiceExport1/WEB-INF/wsdl/SOLQiModule_SOLQiServiceExport1.wsdl" service="SOLQiService" port="SOLQiPort" serviceAddress="http://ussltcsnw2644.solutions.glbsnet.com:9080/SOLQiModuleWeb/sca/SOLQiServiceExport1" doc:name="Web Service Consumer"/>
+    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="9123" doc:name="HTTP Request Configuration"/>
+    <flow name="testprojectFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP" allowedMethods="GET"/>
+        <expression-filter expression="#[message.payload!='favicon.ico']" doc:name="Expression"/>
+        <set-variable doc:name="Set  Language Variable" value="#[message.inboundProperties.'http.query.params'.language]" variableName="language"/>
+        <choice doc:name="Choice">
+            <when expression="#[flowVars.language=='French']">
+                <set-payload doc:name="Reply in French" value="Message in French!"/>
+            </when>
+            <when expression="#[flowVars.language=='Spanish']">
+                <set-payload doc:name="Reply in Spanish" value="Spanish Message!"/>
+            </when>
+            <otherwise>
+                <set-variable variableName="language" value="default language" doc:name="Set Default Language Variable"/>
+                <set-payload doc:name="Reply in Default English" value="In English"/>
+            </otherwise>
+        </choice>
+        <logger level="INFO" doc:name="Logger" message="The reply &quot;#[message.payload]&quot; means &quot;Message&quot; in #[flowVars.language]"/>
+    </flow>
+</mule>

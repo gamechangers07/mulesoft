@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:findFlightResponse xmlns:ns0="http://soap.training.mulesoft.com/">
+  <return>
+    <airlineName>united</airlineName>
+	<code>ABC</code>  	<departureDate>2016/06/05</departureDate>
+    <destination>SFO</destination>
+    <emptySeats>1</emptySeats>
+    <origin>LAX</origin>
+    <planeType>Boing</planeType>
+    <price a="dd">2</price>
+  </return>
+</ns0:findFlightResponse>

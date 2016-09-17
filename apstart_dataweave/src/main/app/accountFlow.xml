@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:sfdc="http://www.mulesoft.org/schema/mule/sfdc"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/sfdc http://www.mulesoft.org/schema/mule/sfdc/current/mule-sfdc.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+   
+    <file:connector name="AccountFileMapping"  autoDelete="false" streaming="true" validateConnections="true" doc:name="File"/>
+    <data-mapper:config name="CSV_To_Map" transformationGraphPath="csv_to_map.grf" doc:name="CSV_To_Map"/>
+    <flow name="getAccountFlow" initialState="stopped">
+        <file:inbound-endpoint path="src/main/test" moveToPattern="#[message.inboundProperties.originalFilename + '.backup']" moveToDirectory="src/main/resources/ouput" responseTimeout="10000" doc:name="File"/>
+        <file:file-to-string-transformer doc:name="File to String"/>
+        <logger level="INFO" doc:name="Logger"/>
+    </flow>
+    <batch:job name="accountFlowBatch">
+        <batch:input>
+            <poll doc:name="Poll">
+                <fixed-frequency-scheduler frequency="30" timeUnit="HOURS"/>
+                <watermark variable="lastProductID" default-expression="0" selector="MAX" selector-expression="#[payload.id]"/>
+                <db:select config-ref="MySQL_Configuration" doc:name="Database">
+                    <db:parameterized-query><![CDATA[Select * From product where price >0.71 and id> #[flowVars.lastProductID]]]></db:parameterized-query>
+                </db:select>
+            </poll>
+            <dw:transform-message doc:name="Transform Message">
+                <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload map ((payload01 , indexOfPayload01) -> {
+	Name: payload01.name
+})]]></dw:set-payload>
+            </dw:transform-message>
+
+        </batch:input>
+        <batch:process-records>
+            <batch:step name="Batch_Step3">
+                <enricher source="#[payload.size()&gt;0]" target="#[recordVars.exits]" doc:name="Message Enricher">
+                    <sfdc:query config-ref="Salesforce__Basic_Authentication" query="dsql:SELECT Name FROM Product2 WHERE Name = '#[payload.Name]'" doc:name="Salesforce"/>
+                </enricher>
+                <logger message="#['\n\nRecorsVars :' + recordVars.exists + '\n\nName- '+ payload.Name]" level="INFO" doc:name="Logger"/>
+            </batch:step>
+            <batch:step name="Batch_Step2" accept-expression="#[!recordVars.exists]">
+                <logger message="#['\n\nProcessed :' + payload +'\n\n RecordVars Check 2 '+  recordVars.exists]" level="INFO" doc:name="Logger"/>
+                <batch:commit size="100" doc:name="Batch Commit">
+                    <sfdc:create config-ref="Salesforce__Basic_Authentication" type="Product2" doc:name="Salesforce">
+                        <sfdc:objects ref="#[payload]"/>
+                    </sfdc:create>
+                </batch:commit>
+            </batch:step>
+        </batch:process-records>
+        <batch:on-complete>
+            <logger message="#['\n\nProcessed: ' + payload.processedRecords + ' Failed Records :' + payload.failedRecords+payload.get]" level="INFO" doc:name="Logger"/>
+        </batch:on-complete>
+    </batch:job>
+    <batch:job name="accountsCSVBatch">
+        <batch:input>
+            <file:inbound-endpoint path="src/main/resources/input" moveToPattern="#[message.inboundProperties.originalFilename + '.backup1']" moveToDirectory="src/main/resources/ouput" connector-ref="AccountFileMapping" responseTimeout="10000" metadata:id="a8272aae-f411-46dd-bc16-37fdaae7abb8" doc:name="File">
+                <file:filename-regex-filter pattern=".*csv" caseSensitive="false"/>
+            </file:inbound-endpoint>
+            <dw:transform-message doc:name="Transform Message">
+                <dw:input-payload doc:sample="list_csv_6.csv"/>
+                <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+
+payload]]></dw:set-payload>
+            </dw:transform-message>
+
+            <set-variable variableName="Size" value="#[payload.size()]" doc:name="Size"/>
+        </batch:input>
+        <batch:process-records>
+            <batch:step name="Batch_Step">
+                <set-variable variableName="fname" value="#[payload.Name]" doc:name="Variable"/>
+                <batch:set-record-variable variableName="rname" value="#[payload.Name]" doc:name="Record Variable"/>
+                <logger message="#['\n\nRecordVar: ' + recordVars.rname]" level="INFO" doc:name="Logger"/>
+            </batch:step>
+            <batch:step name="Batch_Step1">
+                <logger message="#['\n\nRecordVar: ' + recordVars.rname]" level="INFO" doc:name="Logger"/>
+            </batch:step>
+        </batch:process-records>
+        <batch:on-complete>
+            <logger message="#['\n\nProcessed: ' + payload.processedRecords + ' Failed Records :' + payload.failedRecords ]" level="INFO" doc:name="Logger"/>
+        </batch:on-complete>
+    </batch:job>
+
+    <flow name="getCSVAccountFlow" initialState="stopped">
+        <file:inbound-endpoint path="src/main/resources/input" moveToPattern="#[message.inboundProperties.originalFilename + '.backup1']" moveToDirectory="src/main/resources/ouput" responseTimeout="10000" doc:name="File" connector-ref="AccountFileMapping">
+            <file:filename-regex-filter pattern=".*csv" caseSensitive="false"/>
+        </file:inbound-endpoint>
+        <data-mapper:transform config-ref="CSV_To_Map" doc:name="CSV To Map"/>
+        <foreach doc:name="For Each">
+            <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+        </foreach>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+
+    <flow name="getSFDCAccountsFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/sfdcAccount" allowedMethods="GET" doc:name="HTTP"/>
+        <sfdc:query config-ref="Salesforce__Basic_Authentication" query="dsql:SELECT BillingCity,BillingCountry,BillingPostalCode,BillingState,BillingStreet,Name FROM Account WHERE BillingPostalCode = '94087'" doc:name="Salesforce"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="getBankAccountsFlow_RAML">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/bank" allowedMethods="GET" doc:name="HTTP"/>
+        <set-variable variableName="qAccountId" value="#[message.inboundProperties.'http.query.params'.accountId]" doc:name="accountId"/>
+        <set-variable variableName="qCustId" value="#[message.inboundProperties.'http.query.params'.custId]" doc:name="custId"/>
+        <http:request config-ref="Bank_REST_Request_Configuration" path="/customers/{customer_id}/accounts" method="GET" doc:name="HTTP">
+            <http:request-builder>
+                <http:uri-param paramName="customer_id" value="34"/>
+            </http:request-builder>
+        </http:request>
+    </flow>
+</mule>
